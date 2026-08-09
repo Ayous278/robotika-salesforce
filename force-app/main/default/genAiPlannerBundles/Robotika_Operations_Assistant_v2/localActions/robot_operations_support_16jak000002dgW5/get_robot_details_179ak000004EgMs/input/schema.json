@@ -1,0 +1,14 @@
+{
+  "required" : [ "nameOrSerial" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "nameOrSerial" : {
+      "title" : "Robot Name or Serial Number",
+      "description" : "Exact robot name or serial number supplied in the user's current message. Extract and pass this value directly. Never leave this input empty.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Provides grounded information about Robotika robots, health scores, operational status, telemetry, components, faults, missions, and maintenance.</description>
+    <localTopicLinks>
+        <genAiPluginName>agent_router_16jak000002dgW5</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>ambiguous_question_16jak000002dgW5</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>off_topic_16jak000002dgW5</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>robot_operations_support_16jak000002dgW5</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>agent_router_16jak000002dgW5</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Determine whether the user needs Robotika operational support, clarification, or redirection.</description>
+        <developerName>agent_router_16jak000002dgW5</developerName>
+        <genAiPluginInstructions>
+            <description>You are the Robotika Operations Assistant. Help users understand current robot operational data stored in Salesforce.
+
+{{state.AgentScriptInternal_agent_instructions}}</description>
+            <developerName>instruction0_179ak000004EgMr</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179ak000004EgMr</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>agent_router</localDeveloperName>
+        <masterLabel>Agent Router</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>robot_operations_support_16jak000002dgW5</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Answer grounded questions about Robotika robots and identify robots requiring attention.</description>
+        <developerName>robot_operations_support_16jak000002dgW5</developerName>
+        <genAiPluginInstructions>
+            <description>You are the Robotika Operations Assistant. Help users understand current robot operational data stored in Salesforce.</description>
+            <developerName>instruction0_179ak000004EgMs</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179ak000004EgMs</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>get_robot_details_179ak000004EgMs</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>get_robots_needing_attention_179ak000004EgMs</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>get_robot_details_179ak000004EgMs</fullName>
+            <description>Retrieve a fresh consolidated operational summary for one robot using the exact name or serial number supplied in the user&apos;s current request.</description>
+            <developerName>get_robot_details_179ak000004EgMs</developerName>
+            <invocationTarget>AgentGetRobotDetails</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_robot_details</localDeveloperName>
+            <masterLabel>Get Robot Details</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>get_robots_needing_attention_179ak000004EgMs</fullName>
+            <description>Retrieve robots that are degraded, unavailable, require maintenance, or have a health score at or below the specified threshold.</description>
+            <developerName>get_robots_needing_attention_179ak000004EgMs</developerName>
+            <invocationTarget>AgentGetRobotsNeedingAttention</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_robots_needing_attention</localDeveloperName>
+            <masterLabel>Get Robots Needing Attention</masterLabel>
+        </localActions>
+        <localDeveloperName>robot_operations_support</localDeveloperName>
+        <masterLabel>Robot Operations Support</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>ambiguous_question_16jak000002dgW5</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Ask the user to clarify an incomplete Robotika request.</description>
+        <developerName>ambiguous_question_16jak000002dgW5</developerName>
+        <genAiPluginInstructions>
+            <description>You are the Robotika Operations Assistant. Help users understand current robot operational data stored in Salesforce.</description>
+            <developerName>instruction0_179ak000004EgMt</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179ak000004EgMt</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>ambiguous_question</localDeveloperName>
+        <masterLabel>Ambiguous Question</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>off_topic_16jak000002dgW5</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Redirect requests that are unrelated to Robotika operations.</description>
+        <developerName>off_topic_16jak000002dgW5</developerName>
+        <genAiPluginInstructions>
+            <description>You are the Robotika Operations Assistant. Help users understand current robot operational data stored in Salesforce.</description>
+            <developerName>instruction0_179ak000004EgMu</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179ak000004EgMu</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>off_topic</localDeveloperName>
+        <masterLabel>Off Topic</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <masterLabel>Robotika Operations Assistant</masterLabel>
+    <plannerType>Atlas__ConcurrentMultiAgentOrchestration</plannerType>
+</GenAiPlannerBundle>

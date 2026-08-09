@@ -1,0 +1,14 @@
+{
+  "required" : [ ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "maximumHealthScore" : {
+      "title" : "Maximum Health Score",
+      "description" : "Maximum health score to include. Use 80 unless the user specifies another valid threshold.",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

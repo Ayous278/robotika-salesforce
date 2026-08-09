@@ -1,0 +1,30 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "robotDetails" : {
+      "title" : "Robot Details",
+      "description" : "Current consolidated Salesforce summary containing robot status, telemetry, components, faults, missions, and maintenance work orders. Component service-life values are measured in operating hours.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "robotFound" : {
+      "title" : "Robot Found",
+      "description" : "Indicates whether a matching robot was found.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "robotId" : {
+      "title" : "Robot ID",
+      "description" : "Salesforce record ID of the matching robot.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
