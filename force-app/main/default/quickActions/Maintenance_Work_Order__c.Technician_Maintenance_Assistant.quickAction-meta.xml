@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Allows a technician to start or complete the current maintenance work order.</description>
+    <flowDefinition>Technician_Maintenance_Assistant</flowDefinition>
+    <label>Technician Maintenance Assistant</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

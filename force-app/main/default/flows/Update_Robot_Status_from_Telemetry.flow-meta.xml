@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <description>Determines the Robot status based on the incoming telemetry status.</description>
+        <name>Determine_Telemetry_Response</name>
+        <label>Determine Telemetry Response</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Mark_Robot_Degraded</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Warning or Threshold Alert</defaultConnectorLabel>
+        <rules>
+            <name>Offline_Telemetry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Telemetry_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Offline</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Mark_Robot_Unavailable</targetReference>
+            </connector>
+            <label>Offline Telemetry</label>
+        </rules>
+        <rules>
+            <name>Critical_Telemetry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Telemetry_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Critical</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Mark_Robot_Maintenance_Required</targetReference>
+            </connector>
+            <label>Critical Telemetry</label>
+        </rules>
+    </decisions>
+    <description>Updates the related Robot operational status when a new Telemetry Summary requires attention.</description>
+    <environments>Default</environments>
+    <interviewLabel>Update Robot Status from Telemetry {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Robot Status from Telemetry</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Mark_Robot_Degraded</name>
+        <label>Mark Robot Degraded</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Robot__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Operational_Status__c</field>
+            <value>
+                <stringValue>Degraded</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Robot__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Mark_Robot_Maintenance_Required</name>
+        <label>Mark Robot Maintenance Required</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Robot__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Operational_Status__c</field>
+            <value>
+                <stringValue>Maintenance Required</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Robot__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Marks the related Robot unavailable when telemetry is offline.</description>
+        <name>Mark_Robot_Unavailable</name>
+        <label>Mark Robot Unavailable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Robot__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Operational_Status__c</field>
+            <value>
+                <stringValue>Unavailable</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Robot__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Determine_Telemetry_Response</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Requires_Attention__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Telemetry_Summary__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <choices>
+        <name>Complete_Work_Choice</name>
+        <choiceText>&lt;pre class=&quot;ql-syntax&quot; spellcheck=&quot;false&quot;&gt;Complete Work
+&lt;/pre&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Complete Work</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Start_Work_Choice</name>
+        <choiceText>&lt;pre class=&quot;ql-syntax&quot; spellcheck=&quot;false&quot;&gt;Start Work
+
+&lt;/pre&gt;</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>&quot;Start Work&quot;</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Start_Work_Plain_Choice</name>
+        <choiceText>&lt;pre class=&quot;ql-syntax&quot; spellcheck=&quot;false&quot;&gt;start work
+&lt;/pre&gt;</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>&quot;start work&quot;</stringValue>
+        </value>
+    </choices>
+    <customProperties>
+        <name>ScreenProgressIndicator</name>
+        <value>
+            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
+        </value>
+    </customProperties>
+    <decisions>
+        <name>Determine_Maintenance_Action</name>
+        <label>Determine Maintenance Action</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Start_Maintenance_Work</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Start Work</defaultConnectorLabel>
+        <rules>
+            <name>Complete_Work</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Complete_Work_Now.value</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Complete_Maintenance_Work</targetReference>
+            </connector>
+            <label>Complete Work</label>
+        </rules>
+    </decisions>
+    <description>Guides a technician through starting or completing a Maintenance Work Order.</description>
+    <environments>Default</environments>
+    <interviewLabel>AI Generated Flow for a Screen Flow with label “Technician Maintenance Assistant” and...</interviewLabel>
+    <label>Technician Maintenance Assistant</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>GptId</name>
+        <value>
+            <stringValue>a44cae57-384d-47bf-b2d5-926d6ee534e0</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>GptLlmIds</name>
+        <value>
+            <stringValue>[&quot;0f0d30b4-fd92-4251-9c9b-824c17c4c38f&quot;,&quot;ee473827-45d4-4b87-a17d-c74012b29492&quot;,&quot;dba75ce6-efa6-4f3d-9692-9ddc381ee709&quot;,&quot;96b0cc59-28b6-4a6e-b588-75053e6b0e06&quot;,&quot;467c3987-eea3-4259-9695-3d11b650e432&quot;]</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <description>Get the Maintenance Work Order whose Record ID equals the recordId variable.</description>
+        <name>Get_Maintenance_Work_Order</name>
+        <label>Get Maintenance Work Order</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Choose_Maintenance_Action</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Maintenance_Work_Order__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Completes the current work order using the technician’s submitted values.</description>
+        <name>Complete_Maintenance_Work_Order</name>
+        <label>Complete Maintenance Work Order</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>Work_Completed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Maintenance_Work_Order.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Actual_End__c</field>
+            <value>
+                <elementReference>Completion_Actual_End</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Labor_Cost__c</field>
+            <value>
+                <elementReference>Completion_Labor_Cost</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Parts_Cost__c</field>
+            <value>
+                <elementReference>Completion_Parts_Cost</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Work_Order_Status__c</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Work_Performed__c</field>
+            <value>
+                <elementReference>Completion_Work_Performed</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Maintenance_Work_Order__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Changes the work order to In Progress and records the current time as Actual Start.</description>
+        <name>Start_Maintenance_Work</name>
+        <label>Start Maintenance Work</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Work_Started</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Maintenance_Work_Order.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Actual_Start__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Work_Order_Status__c</field>
+            <value>
+                <stringValue>In Progress</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Maintenance_Work_Order__c</object>
+    </recordUpdates>
+    <screens>
+        <description>Displays the current work order and asks the technician whether to start or complete the work.</description>
+        <name>Choose_Maintenance_Action</name>
+        <label>Choose Maintenance Action</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Determine_Maintenance_Action</targetReference>
+        </connector>
+        <fields>
+            <name>Work_Order_Details</name>
+            <fieldText>&lt;pre class=&quot;ql-syntax&quot; spellcheck=&quot;false&quot;&gt;Maintenance Work Order
+
+Work Order: {!Get_Maintenance_Work_Order.Name}
+Robot: {!Get_Maintenance_Work_Order.Robot__r.Name}
+Priority: {!Get_Maintenance_Work_Order.Priority__c}
+Current Status:{!Get_Maintenance_Work_Order.Work_Order_Status__c}
+Scheduled Start: {!Get_Maintenance_Work_Order.Scheduled_Start__c}
+Scheduled End: {!Get_Maintenance_Work_Order.Scheduled_End__c}
+&lt;/pre&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Complete_Work_Now</name>
+            <extensionName>flowruntime:toggle</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>messageToggleActive</name>
+                <value>
+                    <stringValue>Complete Work</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>messageToggleInactive</name>
+                <value>
+                    <stringValue>Start Work</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value>
+                    <booleanValue>false</booleanValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Collects the technician’s completion time, costs, and work notes.</description>
+        <name>Complete_Maintenance_Work</name>
+        <label>Complete Maintenance Work</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Complete_Maintenance_Work_Order</targetReference>
+        </connector>
+        <fields>
+            <name>Completion_Actual_End</name>
+            <dataType>DateTime</dataType>
+            <defaultValue>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </defaultValue>
+            <fieldText>Actual End</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Completion_Labor_Cost</name>
+            <dataType>Currency</dataType>
+            <defaultValue>
+                <numberValue>0.0</numberValue>
+            </defaultValue>
+            <fieldText>Labor Cost</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <scale>2</scale>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Completion_Parts_Cost</name>
+            <dataType>Currency</dataType>
+            <defaultValue>
+                <numberValue>0.0</numberValue>
+            </defaultValue>
+            <fieldText>Parts Cost</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <scale>2</scale>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Completion_Work_Performed</name>
+            <fieldText>Work Performed</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Work_Completed</name>
+        <label>Work Completed</label>
+        <locationX>50</locationX>
+        <locationY>674</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Work_Completed_Message</name>
+            <fieldText>&lt;p&gt;The maintenance work order has been completed successfully.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Maintenance work has been started successfully.</description>
+        <name>Work_Started</name>
+        <label>Work Started</label>
+        <locationX>314</locationX>
+        <locationY>566</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Work_Started_Message</name>
+            <fieldText>&lt;p&gt;Maintenance work has been started successfully.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Maintenance_Work_Order</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle
+    xmlns="http://soap.sforce.com/2006/04/metadata"
+>
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+
+    <masterLabel>
+        Robot Telemetry Panel
+    </masterLabel>
+
+    <description>
+        Displays recent telemetry for the current Robot record.
+    </description>
+
+    <targets>
+        <target>
+            lightning__RecordPage
+        </target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Robot__c</object>
+            </objects>
+
+            <property
+                name="recordLimit"
+                type="Integer"
+                label="Number of telemetry records"
+                description="Choose between 1 and 50 records."
+                default="10"
+                min="1"
+                max="50"
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

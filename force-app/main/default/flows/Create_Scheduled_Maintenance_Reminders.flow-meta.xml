@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <description>Checks whether the work order starts between now and 24 hours from now.</description>
+        <name>Maintenance_Within_24_Hours</name>
+        <label>Maintenance Within 24 Hours</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Not Within Next 24 Hours</defaultConnectorLabel>
+        <rules>
+            <name>Within_Next_24_Hours</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Is_Within_Next_24_Hours</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Technician_Reminder_Task</targetReference>
+            </connector>
+            <label>Within Next 24 Hours</label>
+        </rules>
+    </decisions>
+    <description>Creates a reminder Task for the assigned technician when scheduled maintenance begins within the next 24 hours.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Returns true when Scheduled Start is between now and 24 hours from now.</description>
+        <name>Is_Within_Next_24_Hours</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+    {!$Record.Scheduled_Start__c} &gt;= {!$Flow.CurrentDateTime},
+    {!$Record.Scheduled_Start__c} &lt;= {!$Flow.CurrentDateTime} + 1
+)</expression>
+    </formulas>
+    <formulas>
+        <description>Date portion of the work order Scheduled Start.</description>
+        <name>Scheduled_Start_Date</name>
+        <dataType>Date</dataType>
+        <expression>DATEVALUE({!$Record.Scheduled_Start__c})</expression>
+    </formulas>
+    <formulas>
+        <description>Date and time exactly 24 hours after the scheduled Flow execution time.</description>
+        <name>Twenty_Four_Hours_From_Now</name>
+        <dataType>DateTime</dataType>
+        <expression>{!$Flow.CurrentDateTime} + 1</expression>
+    </formulas>
+    <interviewLabel>Create Scheduled Maintenance Reminders {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create Scheduled Maintenance Reminders</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>Creates a maintenance reminder Task assigned to the work order technician.</description>
+        <name>Create_Technician_Reminder_Task</name>
+        <label>Create Technician Reminder Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Mark_Reminder_Sent</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>Scheduled_Start_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Assigned_Technician__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Upcoming Robotika Maintenance</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordUpdates>
+        <description>Prevents duplicate reminder Tasks for the work order.</description>
+        <name>Mark_Reminder_Sent</name>
+        <label>Mark Reminder Sent</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Reminder_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Maintenance_Work_Order__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Maintenance_Within_24_Hours</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Work_Order_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Scheduled</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Scheduled_Start__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Assigned_Technician__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Reminder_Sent__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Maintenance_Work_Order__c</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2026-08-08</startDate>
+            <startTime>08:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

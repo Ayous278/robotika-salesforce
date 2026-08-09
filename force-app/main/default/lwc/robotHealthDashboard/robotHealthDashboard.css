@@ -1,0 +1,146 @@
+:host {
+    display: block;
+}
+
+.toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+
+.toolbar lightning-input {
+    width: 15rem;
+}
+
+.refresh-button {
+    padding-bottom: 0.125rem;
+}
+
+.loading-container {
+    position: relative;
+    min-height: 8rem;
+}
+
+.summary {
+    color: #3e3e3c;
+}
+
+.summary-number {
+    color: #0176d3;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-right: 0.25rem;
+}
+
+.robot-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 1rem;
+}
+
+.robot-card {
+    background: #ffffff;
+    border: 1px solid #dddbda;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 8%);
+    padding: 1rem;
+}
+
+.robot-card:hover {
+    border-color: #0176d3;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 12%);
+}
+
+.robot-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.robot-link {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: #0176d3;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0;
+    text-align: left;
+}
+
+.robot-link:hover,
+.robot-link:focus {
+    text-decoration: underline;
+}
+
+.serial-number {
+    color: #706e6b;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+}
+
+.health-section {
+    margin-top: 1rem;
+}
+
+.health-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+
+.robot-details {
+    border-top: 1px solid #ecebea;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+}
+
+.robot-details dt {
+    color: #706e6b;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.robot-details dd {
+    color: #181818;
+    margin: 0.2rem 0 0;
+}
+
+.empty-state {
+    color: #3e3e3c;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
+}
+
+.empty-state p {
+    color: #706e6b;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 30rem) {
+    .toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .toolbar lightning-input {
+        width: 100%;
+    }
+
+    .robot-grid {
+        grid-template-columns: 1fr;
+    }
+}

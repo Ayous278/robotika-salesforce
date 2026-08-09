@@ -1,0 +1,99 @@
+:host {
+    display: block;
+}
+
+.loading-container {
+    min-height: 8rem;
+    position: relative;
+}
+
+.latest-summary {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 0.75rem;
+    padding: 0 1rem 1rem;
+}
+
+.summary-item {
+    background: #f3f3f3;
+    border-radius: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.75rem;
+}
+
+.summary-label {
+    color: #706e6b;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.battery-progress {
+    padding-bottom: 1rem;
+}
+
+.progress-heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.status {
+    border-radius: 1rem;
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+}
+
+.status_normal {
+    background: #d8f3dc;
+    color: #194e31;
+}
+
+.status_warning {
+    background: #fef1cc;
+    color: #8c4b02;
+}
+
+.status_critical {
+    background: #feded8;
+    color: #8e030f;
+}
+
+.fault-count {
+    border-radius: 1rem;
+    display: inline-block;
+    min-width: 1.5rem;
+    padding: 0.1rem 0.4rem;
+    text-align: center;
+}
+
+.fault-count_alert {
+    background: #ba0517;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.empty-state {
+    color: #3e3e3c;
+    padding: 2.5rem 1rem;
+    text-align: center;
+}
+
+.empty-state h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
+}
+
+.empty-state p {
+    color: #706e6b;
+    margin-top: 0.25rem;
+}

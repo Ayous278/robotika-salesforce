@@ -1,0 +1,195 @@
+<template>
+    <lightning-card
+        title="Recent Robot Telemetry"
+        icon-name="standard:metrics"
+    >
+        <lightning-button
+            slot="actions"
+            label="Refresh"
+            icon-name="utility:refresh"
+            onclick={handleRefresh}
+        >
+        </lightning-button>
+
+        <template lwc:if={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner
+                    alternative-text="Loading telemetry"
+                    size="medium"
+                >
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:elseif={errorMessage}>
+            <div class="slds-p-around_medium">
+                <div
+                    class="slds-notify slds-notify_alert slds-alert_error"
+                    role="alert"
+                >
+                    <lightning-icon
+                        icon-name="utility:error"
+                        alternative-text="Error"
+                        size="x-small"
+                        variant="inverse"
+                    >
+                    </lightning-icon>
+
+                    <span class="slds-m-left_small">
+                        {errorMessage}
+                    </span>
+                </div>
+            </div>
+        </template>
+
+        <template lwc:elseif={hasTelemetry}>
+            <div class="latest-summary">
+                <div class="summary-item">
+                    <span class="summary-label">
+                        Latest status
+                    </span>
+
+                    <span class={latestTelemetry.statusClass}>
+                        {latestTelemetry.status}
+                    </span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">
+                        Battery
+                    </span>
+
+                    <strong>
+                        {latestTelemetry.batteryPercentage}%
+                    </strong>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">
+                        CPU usage
+                    </span>
+
+                    <strong>
+                        {latestTelemetry.cpuPercentage}%
+                    </strong>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">
+                        Active faults
+                    </span>
+
+                    <strong>
+                        {latestTelemetry.activeFaultCount}
+                    </strong>
+                </div>
+            </div>
+
+            <div class="battery-progress slds-p-horizontal_medium">
+                <div class="progress-heading">
+                    <span>Latest battery level</span>
+                    <span>
+                        {latestTelemetry.batteryPercentage}%
+                    </span>
+                </div>
+
+                <lightning-progress-bar
+                    value={latestTelemetry.batteryPercentage}
+                    size="large"
+                >
+                </lightning-progress-bar>
+            </div>
+
+            <div class="table-container">
+                <table
+                    class="slds-table slds-table_cell-buffer
+                           slds-table_bordered"
+                >
+                    <thead>
+                        <tr>
+                            <th scope="col">Recorded</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Battery</th>
+                            <th scope="col">CPU</th>
+                            <th scope="col">CPU Temp.</th>
+                            <th scope="col">Motor Temp.</th>
+                            <th scope="col">Latency</th>
+                            <th scope="col">Faults</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <template
+                            for:each={telemetryRecords}
+                            for:item="telemetry"
+                        >
+                            <tr key={telemetry.id}>
+                                <td>
+                                    <lightning-formatted-date-time
+                                        value={telemetry.recordedAt}
+                                        year="numeric"
+                                        month="short"
+                                        day="2-digit"
+                                        hour="2-digit"
+                                        minute="2-digit"
+                                    >
+                                    </lightning-formatted-date-time>
+                                </td>
+
+                                <td>
+                                    <span class={telemetry.statusClass}>
+                                        {telemetry.status}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {telemetry.batteryPercentage}%
+                                </td>
+
+                                <td>
+                                    {telemetry.cpuPercentage}%
+                                </td>
+
+                                <td>
+                                    {telemetry.cpuTemperature}
+                                </td>
+
+                                <td>
+                                    {telemetry.motorTemperature}
+                                </td>
+
+                                <td>
+                                    {telemetry.networkLatency}
+                                </td>
+
+                                <td>
+                                    <span class={telemetry.faultClass}>
+                                        {telemetry.activeFaultCount}
+                                    </span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <div class="empty-state">
+                <lightning-icon
+                    icon-name="utility:info"
+                    alternative-text="No telemetry"
+                    size="large"
+                >
+                </lightning-icon>
+
+                <h2>No telemetry records found</h2>
+
+                <p>
+                    Telemetry will appear here after the robot
+                    submits its first summary.
+                </p>
+            </div>
+        </template>
+    </lightning-card>
+</template>

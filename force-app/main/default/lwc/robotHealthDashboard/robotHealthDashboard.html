@@ -1,0 +1,147 @@
+<template>
+    <lightning-card
+        title="Robot Health Dashboard"
+        icon-name="standard:asset_object"
+    >
+        <div class="toolbar slds-p-horizontal_medium">
+            <lightning-input
+                type="number"
+                label="Maximum Health Score"
+                value={maximumHealthScore}
+                min="0"
+                max="100"
+                step="1"
+                onchange={handleThresholdChange}
+            >
+            </lightning-input>
+
+            <lightning-button
+                class="refresh-button"
+                label="Refresh"
+                icon-name="utility:refresh"
+                onclick={handleRefresh}
+            >
+            </lightning-button>
+        </div>
+
+        <template lwc:if={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner
+                    alternative-text="Loading robots"
+                    size="medium"
+                >
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:elseif={errorMessage}>
+            <div class="slds-p-around_medium">
+                <div
+                    class="slds-notify slds-notify_alert slds-alert_error"
+                    role="alert"
+                >
+                    <lightning-icon
+                        icon-name="utility:error"
+                        alternative-text="Error"
+                        size="x-small"
+                        variant="inverse"
+                    >
+                    </lightning-icon>
+
+                    <span class="slds-m-left_small">
+                        {errorMessage}
+                    </span>
+                </div>
+            </div>
+        </template>
+
+        <template lwc:elseif={hasRobots}>
+            <div class="summary slds-p-horizontal_medium">
+                <span class="summary-number">
+                    {robotCount}
+                </span>
+                robots currently need attention
+            </div>
+
+            <div class="robot-grid slds-p-around_medium">
+                <template
+                    for:each={robots}
+                    for:item="robot"
+                >
+                    <article
+                        key={robot.id}
+                        class="robot-card"
+                    >
+                        <div class="robot-header">
+                            <div>
+                                <button
+                                    class="robot-link"
+                                    data-record-id={robot.id}
+                                    onclick={handleRobotNavigation}
+                                >
+                                    {robot.name}
+                                </button>
+
+                                <div class="serial-number">
+                                    {robot.serialNumber}
+                                </div>
+                            </div>
+
+                            <lightning-badge
+                                label={robot.operationalStatus}
+                            >
+                            </lightning-badge>
+                        </div>
+
+                        <div class="health-section">
+                            <div class="health-label">
+                                <span>Health score</span>
+
+                                <strong>
+                                    {robot.healthScore}%
+                                </strong>
+                            </div>
+
+                            <lightning-progress-bar
+                                value={robot.healthScore}
+                                size="large"
+                                variant={robot.progressVariant}
+                            >
+                            </lightning-progress-bar>
+                        </div>
+
+                        <dl class="robot-details">
+                            <div>
+                                <dt>Robot type</dt>
+                                <dd>{robot.robotType}</dd>
+                            </div>
+
+                            <div>
+                                <dt>Components</dt>
+                                <dd>{robot.totalComponents}</dd>
+                            </div>
+                        </dl>
+                    </article>
+                </template>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <div class="empty-state">
+                <lightning-icon
+                    icon-name="utility:success"
+                    alternative-text="Healthy"
+                    size="large"
+                    variant="success"
+                >
+                </lightning-icon>
+
+                <h2>No robots need attention</h2>
+
+                <p>
+                    No robots match the current health threshold.
+                </p>
+            </div>
+        </template>
+    </lightning-card>
+</template>

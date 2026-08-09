@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requires_Attention__c</fullName>
+    <formula>OR(
+    ISPICKVAL(Telemetry_Status__c, &quot;Warning&quot;),
+    ISPICKVAL(Telemetry_Status__c, &quot;Critical&quot;),
+    ISPICKVAL(Telemetry_Status__c, &quot;Offline&quot;),
+    Battery_Level__c &lt; 0.20,
+    CPU_Utilization__c &gt; 0.85,
+    CPU_Temperature_Celsius__c &gt; 85,
+    Average_Motor_Temperature_Celsius__c &gt; 80,
+    Active_Fault_Count__c &gt; 0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Requires Attention</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>
